@@ -26,7 +26,7 @@ before writing any enrichment logic.
 - [X] Write a throwaway script that queries MusicBrainz for one known artist and prints
   the raw response — get a feel for what data is actually returned
 - [ ] Do the same for Last.fm — query an artist's tags and top albums
-- [ ] Add `.env` and any cache files to `.gitignore`
+- [X] Add `.env` and any cache files to `.gitignore`
 - [X] Initialise a Git repository and make your first commit
 
 ### Exit Criteria
