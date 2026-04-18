@@ -1,0 +1,3 @@
+# Placeholder for Wikipedia datasource. This will be used to fetch metadata about music tracks, albums, and artists from Wikipedia.
+# The implementation will include functions to search for music information based on various criteria such as track name, artist name, album name, etc.
+# The data fetched from Wikipedia will be used to enrich the metadata of music files in the user's library. This will involve making API calls to Wikipedia's endpoints and processing the responses to extract relevant information for the music files.

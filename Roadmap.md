@@ -12,7 +12,7 @@ before writing any enrichment logic.
 **Estimated effort:** 1–2 sessions
 
 ### Tasks
-- [ ] Create a project folder and initialise a virtual environment
+- [X] Create a project folder and initialise a virtual environment
   ```
   bands_enrichment/
   ├── enrichers/        # One module per data source (musicbrainz.py, lastfm.py, etc.)

@@ -1,0 +1,3 @@
+# Placeholder for MusicBrainz datasource. This will be used to fetch metadata about music tracks, albums, and artists from the MusicBrainz database. 
+# The implementation will include functions to search for music information based on various criteria such as track name, artist name, album name, etc. 
+# The data fetched from MusicBrainz will be used to enrich the metadata of music files in the user's library.

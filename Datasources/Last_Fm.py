@@ -1,0 +1,3 @@
+# Placeholder for fetching metadata about music tracks, albums, and artists from the Last.fm API.
+# The implementation will include functions to search for music information based on various criteria such as track name, artist name, album name, etc.
+# The data fetched from Last.fm will be used to enrich the metadata of music files in the user's library. This will involve making API calls to Last.fm's endpoints and processing the responses to extract relevant information for the music files.

@@ -1,0 +1,3 @@
+# Placeholder for finding bandcamp sites for artists. 
+# The implementation will include functions to search for bandcamp sites based on artist name and other relevant criteria.
+# The data fetched from bandcamp will be used to enrich the metadata of music files in the user's library. This will involve making API calls to bandcamp's endpoints and processing the responses to extract relevant information for the music files.
