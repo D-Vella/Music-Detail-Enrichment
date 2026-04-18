@@ -22,10 +22,10 @@ before writing any enrichment logic.
   └── config.py         # API keys, constants, config
   ```
 - [X] Install core dependencies: `musicbrainzngs`, `requests`, `python-dotenv`
-- [ ] Register for a Last.fm API key and store it in a `.env` file
+- [X] Register for a Last.fm API key and store it in a `.env` file
 - [X] Write a throwaway script that queries MusicBrainz for one known artist and prints
   the raw response — get a feel for what data is actually returned
-- [ ] Do the same for Last.fm — query an artist's tags and top albums
+- [X] Do the same for Last.fm — query an artist's tags and top albums
 - [X] Add `.env` and any cache files to `.gitignore`
 - [X] Initialise a Git repository and make your first commit
 
@@ -40,14 +40,14 @@ external API for a manually specified artist name.
 **Estimated effort:** 1–2 sessions
 
 ### Tasks
-- [ ] Install the `notion-client` Python library
-- [ ] Create a Notion integration at developers.notion.com and connect it to your
+- [X] Install the `notion-client` Python library
+- [X] Create a Notion integration at developers.notion.com and connect it to your
   Bands & Artists database
-- [ ] Store the Notion API key and database ID in `.env`
+- [X] Store the Notion API key and database ID in `.env`
 - [ ] Write a `notion/reader.py` module that queries the database and returns a list of
   artists — at minimum: `id`, `name`, and any fields already populated
-- [ ] Print the results to confirm you're reading the right records
-- [ ] Handle pagination (Notion returns max 100 results per request)
+- [X] Print the results to confirm you're reading the right records
+- [X] Handle pagination (Notion returns max 100 results per request)
 
 ### Exit Criteria
 Running `notion/reader.py` prints a list of artist names from your live Notion database.
