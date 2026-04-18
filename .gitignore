@@ -20,3 +20,6 @@ Thumbs.db
 
 #config files
 config.py
+
+# Ignore local environment variables
+.env

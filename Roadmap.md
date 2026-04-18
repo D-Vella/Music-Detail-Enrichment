@@ -21,13 +21,13 @@ before writing any enrichment logic.
   ├── main.py           # Entry point
   └── config.py         # API keys, constants, config
   ```
-- [ ] Install core dependencies: `musicbrainzngs`, `requests`, `python-dotenv`
+- [X] Install core dependencies: `musicbrainzngs`, `requests`, `python-dotenv`
 - [ ] Register for a Last.fm API key and store it in a `.env` file
-- [ ] Write a throwaway script that queries MusicBrainz for one known artist and prints
+- [X] Write a throwaway script that queries MusicBrainz for one known artist and prints
   the raw response — get a feel for what data is actually returned
 - [ ] Do the same for Last.fm — query an artist's tags and top albums
 - [ ] Add `.env` and any cache files to `.gitignore`
-- [ ] Initialise a Git repository and make your first commit
+- [X] Initialise a Git repository and make your first commit
 
 ### Exit Criteria
 Running a script returns structured data (artist name, country, tags) from at least one
