@@ -59,7 +59,7 @@ Running `notion/reader.py` prints a list of artist names from your live Notion d
 **Estimated effort:** 2–3 sessions
 
 ### Tasks
-- [ ] Write `enrichers/musicbrainz.py` with a function that accepts an artist name and
+- [X] Write `enrichers/musicbrainz.py` with a function that accepts an artist name and
   returns a standardised dict:
   ```python
   {
@@ -73,8 +73,8 @@ Running `notion/reader.py` prints a list of artist names from your live Notion d
   so implement a basic best-match strategy (e.g. exact name match first, then score by
   popularity/type)
 - [ ] Add basic error handling: artist not found, API rate limit, ambiguous results
-- [ ] Set a proper `User-Agent` header as MusicBrainz requires this for API access
-- [ ] Test against 5–10 artists from your list manually and review the output quality
+- [X] Set a proper `User-Agent` header as MusicBrainz requires this for API access
+- [X] Test against 5–10 artists from your list manually and review the output quality
 - [ ] Document fields that are missing or unreliable as known data quality gaps
 
 ### Exit Criteria
