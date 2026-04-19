@@ -44,7 +44,7 @@ external API for a manually specified artist name.
 - [X] Create a Notion integration at developers.notion.com and connect it to your
   Bands & Artists database
 - [X] Store the Notion API key and database ID in `.env`
-- [ ] Write a `notion/reader.py` module that queries the database and returns a list of
+- [X] Write a `notion/reader.py` module that queries the database and returns a list of
   artists — at minimum: `id`, `name`, and any fields already populated
 - [X] Print the results to confirm you're reading the right records
 - [X] Handle pagination (Notion returns max 100 results per request)
@@ -69,13 +69,13 @@ Running `notion/reader.py` prints a list of artist names from your live Notion d
     "musicbrainz_id": "..."
   }
   ```
-- [ ] Handle the fuzzy matching problem — MusicBrainz search returns multiple candidates,
+- [X] Handle the fuzzy matching problem — MusicBrainz search returns multiple candidates,
   so implement a basic best-match strategy (e.g. exact name match first, then score by
   popularity/type)
 - [ ] Add basic error handling: artist not found, API rate limit, ambiguous results
 - [X] Set a proper `User-Agent` header as MusicBrainz requires this for API access
 - [X] Test against 5–10 artists from your list manually and review the output quality
-- [ ] Document fields that are missing or unreliable as known data quality gaps
+- [X] Document fields that are missing or unreliable as known data quality gaps
 
 ### Exit Criteria
 Given an artist name, `musicbrainz.py` returns a clean dict of structured data. You have

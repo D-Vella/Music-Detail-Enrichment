@@ -14,12 +14,6 @@ notion_database_id = os.environ.get("NOTION_DATABASE_ID")
 # 3. Initialize the Notion client
 notion = Client(auth=notion_token)
 
-def get_artists_db():
-    response =  collect_paginated_api(
-        notion.data_sources.query, data_source_id=notion_database_id
-    )
-    return response
-
 def update_page_property(page_id, property_name, property_value):
     #get page properties first
     page = notion.pages.retrieve(page_id=page_id)
