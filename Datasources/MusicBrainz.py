@@ -38,15 +38,15 @@ def search_artist(artist_name, confidence_threshold=85):
     # If we get an exact match, return it immediately
     for artist in filtered_artists:
         if artist['name'].lower() == artist_name.lower():
-            return artist['id']
+            return artist['id'], "Exact Match"
 
     # Sort the remaining artists by score and return the best match
     sorted_artists = sorted(filtered_artists, key=lambda x: x['score'], reverse=True)
 
     if len(sorted_artists) > 0:
-        return sorted_artists[0]["id"]
+        return sorted_artists[0]["id"], "Best Match"
     else:
-        return None
+        return None, None
     
 def get_artist_info(mb_id):
     """Get detailed information about an artist using their MusicBrainz ID"""
@@ -55,13 +55,42 @@ def get_artist_info(mb_id):
         result = mb.get_artist_by_id(mb_id, includes=["release-groups", "url-rels", "tags"], release_type=["album"])
     except mb.WebServiceError as exc:
         print("Something went wrong with the request: %s" % exc)
+        return result  # Return empty dict on error
     else:
+        # This data gappy so I need to guard against missing fields.
         artist = result["artist"]
-        tags = artist["tag-list"]
-        links = artist["url-relation-list"]
+        tags = artist.get("tag-list", []) or []  # Ensure we have a list even if "tag-list" is missing
+        links = artist.get("url-relation-list", []) or []  # Ensure we have a list even if "url-relation-list" is missing
 
-    result["homepage"] = [link["target"] for link in links if link["type"] == "official homepage"][0]
-    result["country"] = pycountry.countries.get(alpha_2=artist["country"])
-    result["albums"] = [album["title"] for album in artist["release-group-list"] if album["primary-type"] == "Album" and "secondary-type-list" not in album]
+        #parse the links to find the official homepage and bandcamp page (if they exist):
+        homepage = None
+        bandcamp = None
 
-    return result
+        for link in links:
+            if link["type"] == "official homepage":
+                homepage = link["target"]
+            elif link["type"] == "bandcamp":
+                bandcamp = link["target"]
+
+        #Parse the album information to return only sutdio albums (exclude singles, EPs, compilations, etc.)
+        albums = []
+        release_groups = artist.get("release-group-list", [])
+        for album in release_groups:
+            if album["primary-type"] == "Album" and "secondary-type-list" not in album:
+                albums.append(album["title"])
+
+        #Country Processing:
+        country_code = artist.get("country") or None
+        if country_code and len(country_code) != 2:
+            country_code = None  # Invalid country code, set to None
+        else:
+            country_name = pycountry.countries.get(alpha_2=country_code)
+        
+        #Build and return the result dictionary
+        result["homepage"] = homepage
+        result["bandcamp"] = bandcamp
+        result["country"] = country_name
+        result["albums"] = albums
+        result["tags"] = [tag["name"] for tag in tags]
+
+        return result
