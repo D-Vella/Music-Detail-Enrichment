@@ -35,18 +35,27 @@ def search_artist(artist_name, confidence_threshold=85):
     #Filter artists based on type (only consider artists and groups)
     filtered_artists = [artist for artist in filtered_artists if artist['type'] in ['Person', 'Group']]
 
-    # If we get an exact match, return it immediately
-    for artist in filtered_artists:
-        if artist['name'].lower() == artist_name.lower():
-            return artist['id'], "Exact Match"
-
     # Sort the remaining artists by score and return the best match
     sorted_artists = sorted(filtered_artists, key=lambda x: x['score'], reverse=True)
 
-    if len(sorted_artists) > 0:
-        return sorted_artists[0]["id"], "Best Match"
-    else:
-        return None, None
+    # Check for a single exact match (case-insensitive) among the sorted artists. Example was Senses where there are multiple exact matches, only declare an exact metch if there is exactly one exact match to avoid false positives.
+    count_exact_matches = sum(1 for artist in sorted_artists if artist['name'].lower() == artist_name.lower())
+    # If we get an exact match, return it immediately
+    if count_exact_matches == 1:
+        for artist in sorted_artists:
+            if artist['name'].lower() == artist_name.lower():
+                return artist['id'], "Exact Match"
+    
+    if count_exact_matches > 1:
+        return None, "Multiple Exact Matches"
+    
+    if count_exact_matches == 0:
+        return None, "No Exact Match"
+
+    # if len(sorted_artists) > 0:
+    #     return sorted_artists[0]["id"], "Best Match"
+    # else:
+    #     return None, None
     
 def get_artist_info(mb_id):
     """Get detailed information about an artist using their MusicBrainz ID"""
@@ -80,6 +89,7 @@ def get_artist_info(mb_id):
                 albums.append(album["title"])
 
         #Country Processing:
+        country_name = None
         country_code = artist.get("country") or None
         if country_code and len(country_code) != 2:
             country_code = None  # Invalid country code, set to None
