@@ -89,3 +89,11 @@ def update_artist(notion, page_id, updates, dry_run=False):
         return
     
     notion.pages.update(page_id=page_id, properties=properties)
+
+# Example Usage:
+#     update_artist(notion, page_id, {
+#     "MB_ID":            ("rich_text", mb_id),
+#     "Country":          ("select",    country),
+#     "High Level Genre": ("select",    genre),
+#     "Website":          ("url",       homepage),
+# }, dry_run=True)
