@@ -16,7 +16,7 @@ username = os.environ.get("LASTFM_USERNAME")
 
 Root_URL = "http://ws.audioscrobbler.com/2.0/"
 
-def last_fm_call(method: str, artist: str, musicbrainz_id: str = None):
+def last_fm_call(method: str, artist = None, musicbrainz_id = None):
     # Last.fm API uses API key for authentication, so we just need to ensure it's available
     if not api_key:
         raise ValueError("LASTFM_API_KEY is missing. Please check your .env file.")
@@ -38,16 +38,14 @@ def last_fm_call(method: str, artist: str, musicbrainz_id: str = None):
 
     response = requests.get(Root_URL, params=params)
     response.raise_for_status()  # Raise an error for bad status codes
-    if response.status_code == 200:
-        print("✅ Successfully authenticated with Last.fm API.")
-    else:
-        raise ValueError("Failed to authenticate with Last.fm API.")
 
     return response.json()
 
-def get_artist_tags(artist: str):
-    json_response = last_fm_call(method="artist.getTopTags", artist=artist)
-    tags = []
-    for tag in json_response['toptags']['tag']:
-            tags.append((tag['name'], tag['count']))
-    return tags
+def get_artist_tags(artist = None,  mb_id = None):
+    json_response = last_fm_call(method="artist.getTopTags", artist=artist,  musicbrainz_id=mb_id)
+    json_response = json_response.get('toptags', [])
+
+    if len(json_response) != 0:
+        return [(tag["name"], tag["count"]) for tag in json_response['tag']]
+    else:
+        return []

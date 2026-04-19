@@ -22,7 +22,7 @@ GOOD_TAGS = {
 def normalise(tag: str) -> str:
     return tag.lower().replace("-", "").replace(" ", "")
 
-def clean_tags(raw_tags):
+def clean_tagsV1(raw_tags):
     cleaned = []
     for tag in raw_tags:
         if tag["name"].lower() in NOISE_TAGS:
@@ -31,3 +31,17 @@ def clean_tags(raw_tags):
         if normalised in GOOD_TAGS:
             cleaned.append(GOOD_TAGS[normalised])  # Return canonical form
     return cleaned
+
+def clean_tags(tags):
+    from collections import defaultdict
+    #ensure you have tuples.
+    flat_list = [ item for item in tags if type(item) == tuple]
+    #normalize the values using lower and strip.
+    normalized_list = [ (item[0].strip().lower(), item[1]) for item in flat_list]
+
+    # Combine into single entries, summing scores
+    dd_flat_list = defaultdict(int)
+    for key, value in normalized_list:
+        dd_flat_list[key] += value
+
+    return dd_flat_list
