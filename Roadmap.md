@@ -89,12 +89,12 @@ a rough sense of how reliable the results are for your catalogue.
 
 ### Tasks
 - [X] Write `enrichers/lastfm.py` with a function that returns top tags for an artist
-- [ ] Apply data cleaning logic to the raw tags — Last.fm tags are community-driven and
+- [X] Apply data cleaning logic to the raw tags — Last.fm tags are community-driven and
   noisy (e.g. filter out tags like "seen live", "favourite", "awesome")
-- [ ] Define a simple tag hierarchy or priority list: primary genre first, subgenre second
-- [ ] Where MusicBrainz already returned genre data, compare the two sources and decide
+- [X] Define a simple tag hierarchy or priority list: primary genre first, subgenre second
+- [X] Where MusicBrainz already returned genre data, compare the two sources and decide
   on a merge strategy (e.g. prefer Last.fm tags, fall back to MusicBrainz)
-- [ ] Test against the same 5–10 artist sample from Phase 3
+- [X] Test against the same 5–10 artist sample from Phase 3
 
 ### Exit Criteria
 Given an artist name, `lastfm.py` returns a cleaned list of genre/subgenre tags. You have
@@ -109,9 +109,9 @@ a merge strategy documented in code comments or a README note.
 ### Tasks
 - [X] Write `notion/writer.py` with a function that accepts a Notion page ID and a dict
   of field updates, and patches the page via the API
-- [ ] Map your enricher output fields to Notion property names — handle type differences
+- [X] Map your enricher output fields to Notion property names — handle type differences
   (text, number, select, multi-select, URL)
-- [ ] Add a dry-run mode: print what *would* be written without actually writing it —
+- [X] Add a dry-run mode: print what *would* be written without actually writing it —
   useful for QA before committing changes
 - [ ] Run a dry-run over your sample set and review the proposed updates
 - [ ] Confirm the writes look correct on one artist before running at scale
