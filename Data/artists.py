@@ -7,8 +7,10 @@ class Artist:
         self.country = country
         self.website_url = kwargs.get("website_url")
         self.bandcamp_url = kwargs.get("bandcamp_url")
-        # Use a set for tags to automatically handle duplicate tags
-        self.tags = set(tags) if tags else set()  # Ensure we have a set even if tags is None
+        # Use a list for tags to capture duplicate tags
+        # Ensure we have a list even if tags is None
+        self.tags = list(tags) if tags else [] 
+        
         # Use other keyword arguments to store any other data (e.g., genre, formation_year)
         self.__dict__.update(kwargs) 
 
@@ -30,6 +32,8 @@ class Artist:
 
 # Storage Functions.
 
+    def add_tags(self, tags):
+        self.tags.extend(tags)
 # def add_artist(artist: Artist):
 #     """Adds or updates an artist in the database."""
 #     # Normalize the key by making it lowercase and stripping whitespace

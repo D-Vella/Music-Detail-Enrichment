@@ -16,7 +16,7 @@ username = os.environ.get("LASTFM_USERNAME")
 
 Root_URL = "http://ws.audioscrobbler.com/2.0/"
 
-def last_fm_call(method: str, artist: str):
+def last_fm_call(method: str, artist: str, musicbrainz_id: str = None):
     # Last.fm API uses API key for authentication, so we just need to ensure it's available
     if not api_key:
         raise ValueError("LASTFM_API_KEY is missing. Please check your .env file.")
@@ -25,10 +25,17 @@ def last_fm_call(method: str, artist: str):
     # Test the API key by making a simple request
     params = {
         'method': method,
-        'artist': artist,
         'api_key': api_key,
         'format': 'json'
     }
+
+    if artist:
+        params['artist'] = artist
+    elif musicbrainz_id:
+        params['mbid'] = musicbrainz_id
+    else:
+        raise ValueError("Either artist name or MusicBrainz ID must be provided for the API call.")
+
     response = requests.get(Root_URL, params=params)
     response.raise_for_status()  # Raise an error for bad status codes
     if response.status_code == 200:

@@ -96,11 +96,18 @@ def get_artist_info(mb_id):
         else:
             country_name = pycountry.countries.get(alpha_2=country_code)
         
+        tags = []
+        for tag in artist.get("tag-list", []):
+            tags.append({
+                "name": tag["name"],
+                "score": int(tag.get("count", 0))  # Convert count to an integer, default to 0 if missing
+            })
+
         #Build and return the result dictionary
         result["homepage"] = homepage
         result["bandcamp"] = bandcamp
         result["country"] = country_name
         result["albums"] = albums
-        result["tags"] = [tag["name"] for tag in tags]
+        result["tags"] = [(tag["name"], tag["score"]) for tag in tags]
 
         return result
