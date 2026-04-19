@@ -19,19 +19,6 @@ GOOD_TAGS = {
     "Classical", "Blues", "Reggae", "World Music", "Singer-Songwriter"
              }
 
-def normalise(tag: str) -> str:
-    return tag.lower().replace("-", "").replace(" ", "")
-
-def clean_tagsV1(raw_tags):
-    cleaned = []
-    for tag in raw_tags:
-        if tag["name"].lower() in NOISE_TAGS:
-            continue
-        normalised = normalise(tag["name"])
-        if normalised in GOOD_TAGS:
-            cleaned.append(GOOD_TAGS[normalised])  # Return canonical form
-    return cleaned
-
 def clean_tags(tags):
     from collections import defaultdict
     #ensure you have tuples.
