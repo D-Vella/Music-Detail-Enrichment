@@ -9,11 +9,42 @@ import json
 
 mb.set_useragent("Music Detail Enrichment", "0.1", "https://github.com/D-Vella/music-detail-enrichment")
 
-def search_artist(artist_name):
-    """Search for an artist by name and return their MusicBrainz ID"""
-    result = mb.search_artists(artist=artist_name, limit=1)
-    if len(result["artist-list"]) > 0:
-        return result["artist-list"][0]["id"]
+def search_artist(artist_name, confidence_threshold=85):
+    """Search for an artist by name and return their MusicBrainz ID
+    
+    Args:        
+        artist_name (str): The name of the artist to search for
+        confidence_threshold (int): The minimum confidence score required to consider a match valid (default: 85)
+    
+    Returns:        str: The MusicBrainz ID of the best matching artist, or None if no match meets the confidence threshold
+    """
+    result = mb.search_artists(artist=artist_name, limit=10)
+
+    cleaned_results = []
+    for artist in result['artist-list']:
+        cleaned_results.append({
+            'id': artist['id'],
+            'name': artist['name'],
+            'score': int(artist.get('ext:score', 0)),
+            'type': artist.get('type', 'Unknown')
+        })
+
+    # Filter artists based on confidence threshold
+    filtered_artists = [artist for artist in cleaned_results if artist['score'] >= confidence_threshold]
+
+    #Filter artists based on type (only consider artists and groups)
+    filtered_artists = [artist for artist in filtered_artists if artist['type'] in ['Person', 'Group']]
+
+    # If we get an exact match, return it immediately
+    for artist in filtered_artists:
+        if artist['name'].lower() == artist_name.lower():
+            return artist['id']
+
+    # Sort the remaining artists by score and return the best match
+    sorted_artists = sorted(filtered_artists, key=lambda x: x['score'], reverse=True)
+
+    if len(sorted_artists) > 0:
+        return sorted_artists[0]["id"]
     else:
         return None
     
