@@ -72,7 +72,7 @@ Running `notion/reader.py` prints a list of artist names from your live Notion d
 - [X] Handle the fuzzy matching problem — MusicBrainz search returns multiple candidates,
   so implement a basic best-match strategy (e.g. exact name match first, then score by
   popularity/type)
-- [ ] Add basic error handling: artist not found, API rate limit, ambiguous results
+- [X] Add basic error handling: artist not found, API rate limit, ambiguous results
 - [X] Set a proper `User-Agent` header as MusicBrainz requires this for API access
 - [X] Test against 5–10 artists from your list manually and review the output quality
 - [X] Document fields that are missing or unreliable as known data quality gaps
@@ -88,7 +88,7 @@ a rough sense of how reliable the results are for your catalogue.
 **Estimated effort:** 1–2 sessions
 
 ### Tasks
-- [ ] Write `enrichers/lastfm.py` with a function that returns top tags for an artist
+- [X] Write `enrichers/lastfm.py` with a function that returns top tags for an artist
 - [ ] Apply data cleaning logic to the raw tags — Last.fm tags are community-driven and
   noisy (e.g. filter out tags like "seen live", "favourite", "awesome")
 - [ ] Define a simple tag hierarchy or priority list: primary genre first, subgenre second
@@ -107,7 +107,7 @@ a merge strategy documented in code comments or a README note.
 **Estimated effort:** 2 sessions
 
 ### Tasks
-- [ ] Write `notion/writer.py` with a function that accepts a Notion page ID and a dict
+- [X] Write `notion/writer.py` with a function that accepts a Notion page ID and a dict
   of field updates, and patches the page via the API
 - [ ] Map your enricher output fields to Notion property names — handle type differences
   (text, number, select, multi-select, URL)
