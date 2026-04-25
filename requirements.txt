@@ -1,0 +1,8 @@
+notion-client
+musicbrainzngs
+pylast
+requests
+python-dotenv
+ipykernel
+pycountry
+tqdm

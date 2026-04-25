@@ -23,3 +23,6 @@ config.py
 
 # Ignore local environment variables
 .env
+
+Data/mb_cache.json
+Data/mb_search_cache.json

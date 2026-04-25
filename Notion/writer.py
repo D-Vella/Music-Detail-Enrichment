@@ -14,29 +14,6 @@ notion_token = os.environ.get("NOTION_TOKEN")
 # 3. Initialize the Notion client
 notion = Client(auth=notion_token)
 
-def update_mb_id(page_id, new_value, property_name, overwrite = False):
-    page = notion.pages.retrieve(page_id=page_id)
-    property_type = page['properties'][property_name]['type']
-    property_value = page['properties'][property_name][property_type]
-
-    if property_type == "rich_text" and property_value:
-        #print(f"MB_ID already set for page {page_id} to {property_value}, skipping update.")
-        return  # Exit early if already set
-    
-    notion.pages.update(
-        page_id=page_id,
-        properties={
-            property_name:{
-                property_type: [
-                     {
-                        "type": "text",
-                        "text": {"content": new_value}
-                      }
-                ]
-            }
-        }
-    )
-
 def build_property(property_type, value):
     """Convert a plain value into the nested Notion property structure."""
     if value is None:

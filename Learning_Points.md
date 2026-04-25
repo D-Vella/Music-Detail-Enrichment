@@ -143,3 +143,52 @@ def aggregate_tags(self):
 
 - When creating a new notebook, always create it through Jupyter (File → New Notebook) rather than as a blank file, so the structure is generated for you.
 - Before committing a notebook, check that it at least opens and renders without errors locally.
+
+---
+
+## 6. Dictionary Iteration — `.values()` vs `.items()`
+
+**File:** `app.ipynb`
+
+**Issue:** `clean_tags()` returns a `defaultdict` mapping tag names to scores `{ "heavy metal": 120, "power metal": 85 }`. Iterating over the dict directly yields the string keys, so `x[1]` in the sort lambda was indexing into the string (e.g. `"heavy metal"[1]` = `"e"`) rather than getting the score — causing `IndexError: string index out of range` for any tag with a name shorter than 2 characters.
+
+```python
+# Buggy — iterates over keys (strings), x[1] is a character not a score
+sorted_tags = sorted(cleaned_tags, key=lambda x: x[1], reverse=True)
+
+# Fixed — .items() yields (name, score) tuples
+sorted_tags = sorted(cleaned_tags.items(), key=lambda x: x[1], reverse=True)
+```
+
+**Key lessons:**
+- `.values()` — use when you only need the value as a standalone object (e.g. iterating `Artist` objects from a name→Artist dict).
+- `.items()` — use when you need key and value together as a pair, e.g. when sorting, filtering, or displaying both. Yields `(key, value)` tuples you can index with `[0]` and `[1]`.
+- The rule of thumb: if you find yourself writing `x[1]` in a lambda over a dict, you almost certainly want `.items()` not a bare iteration.
+
+---
+
+## 7. TypeError — Slicing or Indexing `None`
+
+**File:** `Data/artists.py` — `Artist.__str__()`
+
+**Issue:** `self.mbid[:8]` crashed for artists that had no MusicBrainz ID. `mbid` was `None`, and `None` is not a sequence — you cannot slice or index it.
+
+```
+TypeError: 'NoneType' object is not subscriptable
+```
+
+The error surfaced in the notebook via `{updated_data}` in an f-string, which called `__str__()` on the `Artist` object. The notebook line looked innocent; the real crash was one level deeper in `artists.py`.
+
+```python
+# Buggy — crashes if mbid is None
+return f"'{self.name}' (mbid: {self.mbid[:8]}...)"
+
+# Fixed — guard before slicing
+mbid_display = f"{self.mbid[:8]}..." if self.mbid else "no mbid"
+return f"'{self.name}' (mbid: {mbid_display})"
+```
+
+**Key lessons:**
+- Any time you slice or index a variable (`x[:8]`, `x[0]`, `x["key"]`), ask: can this ever be `None`? If yes, guard it first.
+- Read tracebacks **bottom up**: the bottom line is the error type and message; the line just above it is where the crash actually happened. The top of the traceback is merely where the chain started.
+- An f-string like `{some_object}` silently calls `__str__()` — if that method has a bug, the error will appear to come from the f-string line, not from inside the class.

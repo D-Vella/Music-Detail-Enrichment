@@ -16,7 +16,8 @@ class Artist:
 
     def __str__(self):
         # This allows the object to print nicely when you print it
-        return f"'{self.name}' (mbid: {self.mbid[:8]}...)"
+        mbid_display = f"{self.mbid[:8]}..." if self.mbid else "no mbid"
+        return f"'{self.name}' (mbid: {mbid_display})"
 
     def display_info(self):
         print("-" * 30)
