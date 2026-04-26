@@ -36,7 +36,7 @@ def build_property(property_type, value):
     return builders[property_type](value)
 
 
-def update_artist(notion, page_id, updates, dry_run=False):
+def update_artist(page_id, updates, dry_run=False):
     """
     Updates a Notion page with the provided field values.
     

@@ -192,3 +192,34 @@ return f"'{self.name}' (mbid: {mbid_display})"
 - Any time you slice or index a variable (`x[:8]`, `x[0]`, `x["key"]`), ask: can this ever be `None`? If yes, guard it first.
 - Read tracebacks **bottom up**: the bottom line is the error type and message; the line just above it is where the crash actually happened. The top of the traceback is merely where the chain started.
 - An f-string like `{some_object}` silently calls `__str__()` — if that method has a bug, the error will appear to come from the f-string line, not from inside the class.
+
+---
+
+## 8. Assignment Is Not a Copy — Reference vs. Copy
+
+**File:** `app.ipynb`
+
+**Issue:** To compare before-and-after data, a "snapshot" of `notion_artist_database` was needed before enrichment began. The assumption was that assigning it to a new variable would produce an independent copy. It doesn't — both names point to the same object in memory. As enrichment mutated the artists in-place, the "original" changed too, so the comparison showed no differences.
+
+```python
+# Looks like a copy — it isn't. Both variables are the same dict.
+Original_notion_artist_database = notion_artist_database
+
+# Mutations to notion_artist_database also change Original_notion_artist_database
+artist.mbid = mb_id   # this affects both!
+```
+
+**Key lessons:**
+- In Python, `b = a` never copies an object. It just gives the same object a second name. Mutating through either name mutates the one shared object.
+- To get a truly independent copy of a dict of mutable objects (like `Artist` instances), you need `copy.deepcopy()`:
+
+```python
+import copy
+
+# Deep copy: the new dict and every object inside it are independent
+Original_notion_artist_database = copy.deepcopy(notion_artist_database)
+```
+
+- `copy.copy()` (shallow copy) creates a new dict but the values inside still point to the original objects — mutations to those objects still bleed through. Only `deepcopy` gives full independence.
+- The clearest sign you've hit this bug: a "before" variable that mysteriously reflects all the changes you made to the "after" variable.
+- A safe alternative when `deepcopy` feels heavy: rebuild the snapshot from the original raw data source (e.g. re-parse `notion_response`) rather than copying the processed objects.

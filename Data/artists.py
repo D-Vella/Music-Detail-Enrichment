@@ -1,9 +1,10 @@
 class Artist:
     """Represents a single artist with all their associated data."""
-    def __init__(self, name, mbid, country, tags=None, **kwargs):
+    def __init__(self, name, mbid, page_id, country, tags=None, **kwargs):
         # Core properties
         self.name = name
         self.mbid = mbid
+        self.page_id = page_id
         self.country = country
         self.website_url = kwargs.get("website_url")
         self.bandcamp_url = kwargs.get("bandcamp_url")
