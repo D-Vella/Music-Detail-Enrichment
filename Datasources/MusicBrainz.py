@@ -96,7 +96,7 @@ def search_artist(artist_name:str, confidence_threshold=85):
 def get_artist_info(mb_id):
     """Get detailed information about an artist using their MusicBrainz ID"""
     cache = _get_cache()
-    if mb_id in cache:
+    if mb_id in cache and "wikidata" in cache[mb_id]: # Only use cached data if it includes the wikidata link (which is the latest one we added to the fetch process). If more fields are added later, this condition can be updated to check for the presence of those fields instead.
         return cache[mb_id]
 
     try:
@@ -110,11 +110,17 @@ def get_artist_info(mb_id):
 
     homepage = None
     bandcamp = None
+    wikidata = None
+    Bandsintown = None
     for link in links:
         if link["type"] == "official homepage":
             homepage = link["target"]
         elif link["type"] == "bandcamp":
             bandcamp = link["target"]
+        elif link["type"] == "wikidata":
+            wikidata = link["target"]
+        elif link["type"] == "bandsintown":
+            Bandsintown = link["target"]
 
     albums = []
     for album in artist.get("release-group-list", []):
@@ -132,6 +138,8 @@ def get_artist_info(mb_id):
     result = {
         "homepage": homepage,
         "bandcamp": bandcamp,
+        "wikidata": wikidata,
+        "Bandsintown": Bandsintown,
         "country": country_name,
         "albums": albums,
         "tags": tags

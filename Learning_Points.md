@@ -223,3 +223,27 @@ Original_notion_artist_database = copy.deepcopy(notion_artist_database)
 - `copy.copy()` (shallow copy) creates a new dict but the values inside still point to the original objects — mutations to those objects still bleed through. Only `deepcopy` gives full independence.
 - The clearest sign you've hit this bug: a "before" variable that mysteriously reflects all the changes you made to the "after" variable.
 - A safe alternative when `deepcopy` feels heavy: rebuild the snapshot from the original raw data source (e.g. re-parse `notion_response`) rather than copying the processed objects.
+
+---
+
+## 9. Stale Cache — New Fields Added After Cache Was Populated
+
+**File:** `Datasources/MusicBrainz.py` — `get_artist_info()`
+
+**Issue:** `get_artist_info()` caches the full result dict to disk after the first API call. When new fields (`wikidata`, `Bandsintown`) were added to the function later, all existing cache entries were returned as-is — they didn't have those keys. So `.get("wikidata")` always returned `None`, even for artists that definitely have a Wikidata entry, because the API was never called again.
+
+```python
+# Buggy — always returns the cached result, even if it's missing new fields
+if mb_id in cache:
+    return cache[mb_id]
+
+# Fixed — treat the cache as a miss if it's missing a key added since it was written
+if mb_id in cache and "wikidata" in cache[mb_id]:
+    return cache[mb_id]
+```
+
+**Key lessons:**
+- A disk cache is a snapshot of what the API returned **at the time it was written**. If you extend the data model later, old entries won't have the new fields.
+- Add a presence-check for the most recently added field as your cache validity guard. If the entry pre-dates that field, it will be re-fetched and overwritten with the full data.
+- When you can't immediately explain why a field is always `None` despite the data clearly existing in the source, check whether the result is coming from cache rather than a live API call.
+- The in-memory cache (`_cache` global) compounds this: even if you fix the file, the stale dict is already loaded into memory for the duration of the session. Restart the kernel after a cache fix to ensure the updated logic takes effect.

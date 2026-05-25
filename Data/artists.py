@@ -8,6 +8,8 @@ class Artist:
         self.country = country
         self.website_url = kwargs.get("website_url")
         self.bandcamp_url = kwargs.get("bandcamp_url")
+        self.wikidata_url = kwargs.get("wikidata_url")
+        self.bandsintown_url = kwargs.get("bandsintown_url")
         # Use a list for tags to capture duplicate tags
         # Ensure we have a list even if tags is None
         self.tags = list(tags) if tags else [] 

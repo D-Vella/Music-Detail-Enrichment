@@ -40,24 +40,34 @@ class NotionDatabase:
 class myNotionDatabases(NotionDatabase):
     def extract_artist(self, page):
         props = page["properties"]
-        return {
-            "id":                   page["id"],
-            "artist_name":          self.get_text(props["Artist Name"]),
-            "status":               self.get_select(props["Status"]),
-            "high_level_genre":     self.get_select(props["High Level Genre"]),
-            "subgenre":             self.get_multi_select(props["Subgenre"]),
-            "country":              self.get_text(props["Country"]),
-            "label":                self.get_text(props["Label"]),
-            "rating":               self.get_select(props["Rating"]),
-            "format_owned":         self.get_multi_select(props["Format Owned"]),
-            "website":              self.get_url(props["Website"]),
-            "bandcamp_url":         self.get_url(props["Bandcamp url"]),
-            "following_on_bandcamp":self.get_checkbox(props["Following on Bandcamp"]),
-            "seen_live":            self.get_checkbox(props["Seen Live"]),
-            "mb_id":                self.get_text(props["MB_ID"]),
-            "how_i_found_them":     self.get_text(props["How I Found Them"]),
-            "added":                self.get_date(props["Added"]),
-            "last_listened":        self.get_date(props["Last Listened"]),
-            "notes":                self.get_text(props["Notes"]),
-            "Similar_to":           self.get_relation_ids(props["Similar to"]),
-        }
+        try:
+            return_value = {
+                "id":                   page["id"],
+                "artist_name":          self.get_text(props["Artist Name"]),
+                "status":               self.get_select(props["Status"]),
+                "high_level_genre":     self.get_select(props["High Level Genre"]),
+                "subgenre":             self.get_multi_select(props["Subgenre"]),
+                "country":              self.get_text(props["Country"]),
+                "label":                self.get_text(props["Label"]),
+                "rating":               self.get_select(props["Rating"]),
+                "format_owned":         self.get_multi_select(props["Format Owned"]),
+                "website":              self.get_url(props["Website"]),
+                "bandcamp_url":         self.get_url(props["Bandcamp url"]),
+                "following_on_bandcamp":self.get_checkbox(props["Following on Bandcamp"]),
+                "seen_live":            self.get_checkbox(props["Seen Live"]),
+                "mb_id":                self.get_text(props["MB_ID"]),
+                "how_i_found_them":     self.get_text(props["How I Found Them"]),
+                "added":                self.get_date(props["Added"]),
+                "last_listened":        self.get_date(props["Last Listened"]),
+                "notes":                self.get_text(props["Notes"]),
+                "Similar_to":           self.get_relation_ids(props["Similar to"]),
+                "wikidata_url":         self.get_url(props["Wikidata_URL"]),
+                "bandsintown_url":      self.get_url(props["Bandsintown_URL"]),
+            }
+        except KeyError as e:
+            print(f"Missing expected property: {e}")
+            available_props = list(props.keys())
+            print(f"Available properties: {available_props}")
+            print(f"Note: Property names are case-sensitive and must match exactly.")
+            raise
+        return return_value
