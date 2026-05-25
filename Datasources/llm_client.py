@@ -83,9 +83,7 @@ def llm_page_entry(prompt: str) -> dict:
             sound = response.get("sound", "")
             activity = response.get("activity", "")
             discography = response.get("discography", "")
-            sub_genres = response.get("sub_genres", [])
-            if sub_genres not in approved_tags:
-                continue  # If the sub-genres returned are not in the approved list, retry
+            sub_genres = [tag for tag in response.get("sub_genres", []) if tag in approved_tags]
             break  # If parsing is successful, exit the loop
         except Exception as e:
             if attempt < MAX_RETRIES - 1:
