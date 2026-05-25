@@ -1,3 +1,0 @@
-# Placeholder for wikidata datasource. This will be used to fetch metadata about music tracks, albums, and artists from Wikidata.
-# The implementation will include functions to search for music information based on various criteria such as track name, artist name, album name, etc.
-# The data fetched from Wikidata will be used to enrich the metadata of music files in the user's library. This will involve making API calls to Wikidata's endpoints and processing the responses to extract relevant information for the music files.

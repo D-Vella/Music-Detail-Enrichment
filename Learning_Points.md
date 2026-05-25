@@ -247,3 +247,26 @@ if mb_id in cache and "wikidata" in cache[mb_id]:
 - Add a presence-check for the most recently added field as your cache validity guard. If the entry pre-dates that field, it will be re-fetched and overwritten with the full data.
 - When you can't immediately explain why a field is always `None` despite the data clearly existing in the source, check whether the result is coming from cache rather than a live API call.
 - The in-memory cache (`_cache` global) compounds this: even if you fix the file, the stale dict is already loaded into memory for the duration of the session. Restart the kernel after a cache fix to ensure the updated logic takes effect.
+
+---
+
+## 10. Accessing the First Value of a Dictionary — `next(iter(...))`
+
+**File:** `Datasources/Wikipedia.py` — `get_from_wikidata()`
+
+**Issue:** The Wikidata API returns a response like `{"entities": {"Q706748": {...}}}`. To get the entity data, the code tried `response["entities"][0]`, assuming it was a list. Dictionaries are not lists — integer indexing fails with `KeyError: 0`.
+
+**Key lessons:**
+- Dictionaries are indexed by their **keys**, not by position. `d[0]` means "give me the value for key `0`", not "give me the first item".
+- To get the first value when you don't know (or don't want to hardcode) the key, use:
+
+```python
+entity = next(iter(response["entities"].values()))
+```
+
+- Breaking it down:
+  - `dict.values()` — returns a view of all the values in the dictionary.
+  - `iter(...)` — wraps it in an iterator (an object that hands out items one at a time).
+  - `next(...)` — pulls the first item from the iterator without consuming the rest.
+- This is the idiomatic Python way to "peek" at the first value of a dict. It avoids converting the whole thing to a list (`list(...)[0]`) which wastes memory if the dict is large.
+- When you *do* know the key (e.g. the Wikidata ID is already in scope), prefer `d[known_key]` — it's clearer and more explicit. Use `next(iter(...))` only when the key is unknown or irrelevant.

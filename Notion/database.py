@@ -47,7 +47,7 @@ class myNotionDatabases(NotionDatabase):
                 "status":               self.get_select(props["Status"]),
                 "high_level_genre":     self.get_select(props["High Level Genre"]),
                 "subgenre":             self.get_multi_select(props["Subgenre"]),
-                "country":              self.get_text(props["Country"]),
+                "country":              self.get_select(props["Country"]),
                 "label":                self.get_text(props["Label"]),
                 "rating":               self.get_select(props["Rating"]),
                 "format_owned":         self.get_multi_select(props["Format Owned"]),

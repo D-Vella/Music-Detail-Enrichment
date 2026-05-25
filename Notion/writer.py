@@ -36,7 +36,7 @@ def build_property(property_type, value):
     return builders[property_type](value)
 
 
-def update_artist(page_id, updates, dry_run=False):
+def update_artist(page_id, updates, body_blocks=None, dry_run=False):
     """
     Updates a Notion page with the provided field values.
     
@@ -66,6 +66,12 @@ def update_artist(page_id, updates, dry_run=False):
         return
     
     notion.pages.update(page_id=page_id, properties=properties)
+    if body_blocks:
+        existing = notion.blocks.children.list(block_id=page_id)  # type: ignore[index]
+        if not existing["results"]:
+            notion.blocks.children.append(block_id=page_id, children=body_blocks)
+
+
 
 # Example Usage:
 #     update_artist(notion, page_id, {
@@ -74,3 +80,31 @@ def update_artist(page_id, updates, dry_run=False):
 #     "High Level Genre": ("select",    genre),
 #     "Website":          ("url",       homepage),
 # }, dry_run=True)
+
+
+def heading_block(text):
+    return {
+        "object": "block",
+        "type": "heading_2",
+        "heading_2": {
+            "rich_text": [{"type": "text", "text": {"content": text}}]
+        }
+    }
+
+def paragraph_block(text):
+    return {
+        "object": "block",
+        "type": "paragraph",
+        "paragraph": {
+            "rich_text": [{"type": "text", "text": {"content": text}}]
+        }
+    }
+
+def bullet_block(text):
+    return {
+        "object": "block",
+        "type": "bulleted_list_item",
+        "bulleted_list_item": {
+            "rich_text": [{"type": "text", "text": {"content": text}}]
+        }
+    }
